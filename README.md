@@ -1,8 +1,6 @@
 Learning to build a simple todoapp using nodejs, hapi, mongodb and angularjs
 
-Goal:
+Goal: To build a webapp that allows users to signup, login, views/add/update/delete tasks using RESTful API.
 
-Steps:
-1. RESTful api for tasks
-2. User authentication
-3. Angularjs frontend
+Technologies: Nodejs, Hapijs, MongoDB and AngularJS.
+
