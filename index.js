@@ -60,45 +60,59 @@ server.route({
 server.route({
   method: 'POST',
   path: '/tasks',
-  handler: function(request, reply) {
-    var payload = {
-      title: request.payload.title,
-      status: request.payload.status,
-    };
-    var newTask = new Tasks(payload);
-    newTask.save(function(err, task) {
-      if (err) {
-        reply({success: false, message: err.message}).code(400);
-      }
-      else {
-        reply({success: true, result: task}).code(200);
-      }
-    });
-  },
+  config: {
+    handler: function(request, reply) {
+      var payload = {
+        title: request.payload.title,
+        status: request.payload.status,
+      };
+      var newTask = new Tasks(payload);
+      newTask.save(function(err, task) {
+        if (err) {
+          reply({success: false, message: err.message}).code(400);
+        }
+        else {
+          reply({success: true, result: task}).code(200);
+        }
+      });
+    },
+    validate: {
+      payload: {
+        title: joi.string().required(),
+      },
+    },
+  }
 });
 
 server.route({
   method: 'PUT',
   path: '/tasks/{id}',
-  handler: function(request, reply) {
-     var payload = {
-      title: request.payload.title,
-      status: request.payload.status,
-    };
-    Tasks.update({_id: request.params.id}, payload, function(err, task) {
-      if (err) {
-        reply({success: false, message: err.message}).code(400);
-      }
-      else {
-        if (task) {
-          reply({success: true, result: task}).code(200);
+  config: {
+    handler: function(request, reply) {
+       var payload = {
+        title: request.payload.title,
+        status: request.payload.status,
+      };
+      Tasks.update({_id: request.params.id}, payload, function(err, task) {
+        if (err) {
+          reply({success: false, message: err.message}).code(400);
         }
         else {
-          reply({success: false, message: 'Did not find task to update'}).code(404);
+          if (task) {
+            reply({success: true, result: task}).code(200);
+          }
+          else {
+            reply({success: false, message: 'Did not find task to update'}).code(404);
+          }
         }
-      }
-    });
-  },
+      });
+    },
+    validate: {
+      payload: {
+        title: joi.string().required(),
+      },
+    },
+  }
 });
 
 server.route({
