@@ -15,6 +15,11 @@ var Tasks = mongoose.model('Task', {
     type: Boolean,
     default: false,
   },
+  _owner: {
+    type: String,
+    index: true,
+    select: false,
+  }
 });
 
 var Users = mongoose.model('User', {
@@ -49,7 +54,7 @@ server.route({
   path: '/tasks',
   config: {
     handler: function (request, reply) {
-      Tasks.find({}, function(err, tasks) {
+      Tasks.find({_owner: request.auth.credentials.id}, function(err, tasks) {
         if (err) {
           reply({success: false, message: err.message}).code(400);
         }
@@ -67,7 +72,7 @@ server.route({
   path: '/tasks/{id}',
   config: {
      handler: function (request, reply) {
-      Tasks.findOne({_id: request.params.id}, function(err, task) {
+      Tasks.findOne({_id: request.params.id, _owner: request.auth.credentials.id}, function(err, task) {
         if (err) {
           reply({success:false, message: err.message}).code(400);
         }
@@ -93,6 +98,7 @@ server.route({
       var payload = {
         title: request.payload.title,
         status: request.payload.status,
+        _owner: request.auth.credentials.id,
       };
       var newTask = new Tasks(payload);
       newTask.save (function(err, task) {
@@ -122,7 +128,7 @@ server.route({
         title: request.payload.title,
         status: request.payload.status,
       };
-      Tasks.update({_id: request.params.id}, payload, function(err, task) {
+      Tasks.update({_id: request.params.id, _owner: request.auth.credentials.id}, payload, function(err, task) {
         if (err) {
           reply({success: false, message: err.message}).code(400);
         }
@@ -150,7 +156,7 @@ server.route({
   path: '/tasks/{id}',
   config: {
      handler: function (request, reply) {
-      Tasks.remove({_id: request.params.id}, function(err, task) {
+      Tasks.remove({_id: request.params.id, _owner: request.auth.credentials.id}, function(err, task) {
         if (err) {
           reply({success:false, message: err.message}).code(400);
         }
