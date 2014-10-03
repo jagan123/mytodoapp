@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jagan123/mytodoapp",
   "dependencies": {
     "bcrypt": "^0.8.0",
+    "boom": "^2.5.1",
     "hapi": "^6.10.0",
     "joi": "^4.7.0",
     "mongoose": "^3.8.17",
