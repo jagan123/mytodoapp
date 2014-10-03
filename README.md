@@ -1,4 +1,4 @@
-Goal: To build a webapp that allows users to signup, login, views/add/update/delete tasks using RESTful API.
+Goal: To build a todo app RESTful API with user authentication.
 
-Technologies: Nodejs, Hapijs, MongoDB and AngularJS.
+Technologies: Nodejs, Hapijs & MongoDB.
 
